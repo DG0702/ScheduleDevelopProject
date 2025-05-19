@@ -76,8 +76,13 @@ public class UserService {
         );
     }
 
-    public void deleteById(Long userId) {
-        userRepository.findByIdOrElseThrow(userId);
+    public void delete(Long userId, UserRequestDto dto) {
+        User user = userRepository.findByIdOrElseThrow(userId);
+
+        if(!(user.getPassword().equals(dto.getPassword()))){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Wrong password");
+        }
+
         userRepository.deleteById(userId);
     }
 
