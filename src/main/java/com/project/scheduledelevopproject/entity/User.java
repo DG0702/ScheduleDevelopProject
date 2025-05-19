@@ -1,5 +1,6 @@
 package com.project.scheduledelevopproject.entity;
 
+import com.project.scheduledelevopproject.dto.user.UserResponseDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -30,5 +31,20 @@ public class User extends BaseEntity{
         this.userName = userName;
         this.userEmail = userEmail;
         this.password = password;
+    }
+
+    // update
+    public void update(String userName, String userEmail){
+        if(userName != null){
+            this.userName = userName;
+        }
+        if(userEmail != null){
+            this.userEmail = userEmail;
+        }
+    }
+
+    // entity -> dto
+    public UserResponseDto toDto(){
+        return new UserResponseDto(userId, userName, userEmail, getCreatedAt(), getUpdatedAt());
     }
 }
