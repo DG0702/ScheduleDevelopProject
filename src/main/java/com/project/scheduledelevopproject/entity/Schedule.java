@@ -1,5 +1,6 @@
 package com.project.scheduledelevopproject.entity;
 
+import com.project.scheduledelevopproject.dto.schedule.ScheduleResponseDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -36,5 +37,25 @@ public class Schedule extends BaseEntity{
         this.contents = contents;
     }
 
+    // update
+    public void update (String title, String contents){
+        if(title != null){
+            this.title = title;
+        }
+
+        if(contents != null){
+            this.contents = contents;
+        }
+    }
+
+    // entity -> dto
+    public ScheduleResponseDto toDto(){
+        return new ScheduleResponseDto(
+                scheduleId,
+                user.getUserId(),
+                title, contents,
+                getCreatedAt(),
+                getUpdatedAt());
+    }
 
 }
