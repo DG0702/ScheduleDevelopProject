@@ -29,7 +29,12 @@ public class Schedule extends BaseEntity{
     @Column(name = "contents")
     private String contents;
 
-
+    public Schedule(User user, String password, String title, String contents) {
+        this.user = user;
+        this.password = password;
+        this.title = title;
+        this.contents = contents;
+    }
 
 
 }

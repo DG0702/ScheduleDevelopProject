@@ -25,5 +25,10 @@ public class User extends BaseEntity{
     @Column(name = "password", nullable = false)
     private String password;
 
-
+    // toEntity 생성자
+    public User(String userName, String userEmail, String password) {
+        this.userName = userName;
+        this.userEmail = userEmail;
+        this.password = password;
+    }
 }
