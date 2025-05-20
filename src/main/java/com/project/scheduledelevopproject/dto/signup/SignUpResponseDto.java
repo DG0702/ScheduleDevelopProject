@@ -12,7 +12,6 @@ public class SignUpResponseDto {
     private Long userID;
     private String userName;
     private String userEmail;
-    private String password;
     private LocalDate createdAt;
     private LocalDate updatedAt;
 }

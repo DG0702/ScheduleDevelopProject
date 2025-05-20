@@ -99,7 +99,6 @@ public class UserService {
                 signUp.getUserId(),
                 signUp.getUserName(),
                 signUp.getUserEmail(),
-                signUp.getPassword(),
                 signUp.getCreatedAt(),
                 signUp.getUpdatedAt()
         );

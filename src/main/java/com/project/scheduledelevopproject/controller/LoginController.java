@@ -23,7 +23,6 @@ public class LoginController {
     public ResponseEntity<LoginResponseDto> login(@RequestBody LoginRequestDto dto, HttpServletRequest request) {
         LoginResponseDto login = loginService.login(dto);
 
-
         HttpSession session = request.getSession();
         session.setAttribute("loginUserId",login.getUserId());
 
