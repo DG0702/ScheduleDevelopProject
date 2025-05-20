@@ -1,5 +1,7 @@
 package com.project.scheduledelevopproject.service;
 
+import com.project.scheduledelevopproject.dto.signup.SignUpRequestDto;
+import com.project.scheduledelevopproject.dto.signup.SignUpResponseDto;
 import com.project.scheduledelevopproject.dto.user.UserRequestDto;
 import com.project.scheduledelevopproject.dto.user.UserResponseDto;
 import com.project.scheduledelevopproject.entity.User;
@@ -87,6 +89,21 @@ public class UserService {
     }
 
 
+    // 회원가입
+    public SignUpResponseDto signup(SignUpRequestDto dto){
+        User user = dto.toEntity();
+
+        User signUp = userRepository.save(user);
+
+        return new SignUpResponseDto(
+                signUp.getUserId(),
+                signUp.getUserName(),
+                signUp.getUserEmail(),
+                signUp.getPassword(),
+                signUp.getCreatedAt(),
+                signUp.getUpdatedAt()
+        );
+    }
 
 
 
