@@ -5,6 +5,7 @@ import com.project.scheduledelevopproject.dto.login.LoginResponseDto;
 import com.project.scheduledelevopproject.service.LoginService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +21,7 @@ public class LoginController {
 
 
     @PostMapping("/login")
-    public ResponseEntity<LoginResponseDto> login(@RequestBody LoginRequestDto dto, HttpServletRequest request) {
+    public ResponseEntity<LoginResponseDto> login(@RequestBody @Valid LoginRequestDto dto, HttpServletRequest request) {
         LoginResponseDto login = loginService.login(dto);
 
         HttpSession session = request.getSession();

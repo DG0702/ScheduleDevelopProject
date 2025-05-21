@@ -3,6 +3,7 @@ package com.project.scheduledelevopproject.controller;
 import com.project.scheduledelevopproject.dto.user.UserRequestDto;
 import com.project.scheduledelevopproject.dto.user.UserResponseDto;
 import com.project.scheduledelevopproject.service.UserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +20,7 @@ public class UserController {
 
 
     @PostMapping
-    public ResponseEntity<UserResponseDto> createUser(@RequestBody UserRequestDto dto) {
+    public ResponseEntity<UserResponseDto> createUser(@RequestBody @Valid UserRequestDto dto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(userService.save(dto));
     }
 
@@ -34,12 +35,12 @@ public class UserController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<UserResponseDto> updateUser(@PathVariable Long id, @RequestBody UserRequestDto dto) {
+    public ResponseEntity<UserResponseDto> updateUser(@PathVariable Long id, @RequestBody @Valid UserRequestDto dto) {
         return ResponseEntity.status(HttpStatus.OK).body(userService.update(id,dto));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteUser(@PathVariable Long id,@RequestBody UserRequestDto dto) {
+    public ResponseEntity<Void> deleteUser(@PathVariable Long id,@RequestBody @Valid UserRequestDto dto) {
         userService.delete(id,dto);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
