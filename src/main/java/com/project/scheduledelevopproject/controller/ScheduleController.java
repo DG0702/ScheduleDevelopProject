@@ -2,7 +2,9 @@ package com.project.scheduledelevopproject.controller;
 
 import com.project.scheduledelevopproject.dto.schedule.ScheduleRequestDto;
 import com.project.scheduledelevopproject.dto.schedule.ScheduleResponseDto;
+import com.project.scheduledelevopproject.entity.User;
 import com.project.scheduledelevopproject.service.ScheduleService;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -19,8 +21,11 @@ public class ScheduleController {
     private final ScheduleService scheduleService;
 
     @PostMapping
-    public ResponseEntity<ScheduleResponseDto> save(@RequestBody @Valid ScheduleRequestDto dto){
-        return ResponseEntity.status(HttpStatus.OK).body(scheduleService.save(dto));
+    public ResponseEntity<ScheduleResponseDto> save(@RequestBody @Valid ScheduleRequestDto dto, HttpSession session){
+
+        User user = (User) session.getAttribute("loginUser");
+
+        return ResponseEntity.status(HttpStatus.OK).body(scheduleService.save(dto,user));
     }
 
     @GetMapping

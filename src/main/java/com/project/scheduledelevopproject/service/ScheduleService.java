@@ -1,5 +1,6 @@
 package com.project.scheduledelevopproject.service;
 
+import com.project.scheduledelevopproject.config.PasswordEncoder;
 import com.project.scheduledelevopproject.dto.schedule.ScheduleRequestDto;
 import com.project.scheduledelevopproject.dto.schedule.ScheduleResponseDto;
 import com.project.scheduledelevopproject.entity.Schedule;
@@ -23,10 +24,14 @@ public class ScheduleService {
 
     private final UserRepository userRepository;
 
+    private final PasswordEncoder passwordEncoder;
 
-    public ScheduleResponseDto save(ScheduleRequestDto dto){
 
-        User userId = userRepository.findByIdOrElseThrow(dto.getUserId());
+    public ScheduleResponseDto save(ScheduleRequestDto dto, User user){
+
+        Long loginId = user.getId();
+
+        User userId = userRepository.findByIdOrElseThrow(loginId);
 
         Schedule schedule = dto.toEntity(userId);
 
@@ -34,7 +39,7 @@ public class ScheduleService {
 
         return new ScheduleResponseDto(
                 savedSchedule.getScheduleId(),
-                savedSchedule.getUser().getUserId(),
+                savedSchedule.getUser().getId(),
                 savedSchedule.getTitle(),
                 savedSchedule.getContents(),
                 savedSchedule.getCreatedAt(),
@@ -59,7 +64,7 @@ public class ScheduleService {
 
         return new ScheduleResponseDto(
                 schedule.getScheduleId(),
-                schedule.getUser().getUserId(),
+                schedule.getUser().getId(),
                 schedule.getTitle(),
                 schedule.getContents(),
                 schedule.getCreatedAt(),
@@ -71,8 +76,10 @@ public class ScheduleService {
     public ScheduleResponseDto update(Long id, ScheduleRequestDto dto){
         Schedule schedule = scheduleRepository.findScheduleByIdOrElseThrow(id);
 
-        if(!(schedule.getPassword().equals(dto.getPassword()))){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Wrong Password");
+        boolean isMatch = passwordEncoder.matches(dto.getPassword(), schedule.getPassword());
+
+        if(!isMatch){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Wrong password");
         }
 
         // update
@@ -80,7 +87,7 @@ public class ScheduleService {
 
         return new ScheduleResponseDto(
                 schedule.getScheduleId(),
-                schedule.getUser().getUserId(),
+                schedule.getUser().getId(),
                 schedule.getTitle(),
                 schedule.getContents(),
                 schedule.getCreatedAt(),
@@ -92,8 +99,10 @@ public class ScheduleService {
     public void delete(Long id, ScheduleRequestDto dto){
         Schedule schedule = scheduleRepository.findScheduleByIdOrElseThrow(id);
 
-        if(!(schedule.getPassword().equals(dto.getPassword()))){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Wrong Password");
+        boolean isMatch = passwordEncoder.matches(dto.getPassword(), schedule.getPassword());
+
+        if(!isMatch){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Wrong password");
         }
 
         scheduleRepository.delete(schedule);

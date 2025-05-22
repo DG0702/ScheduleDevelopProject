@@ -25,7 +25,7 @@ public class LoginController {
         LoginResponseDto login = loginService.login(dto);
 
         HttpSession session = request.getSession();
-        session.setAttribute("loginUserId",login.getUserId());
+        session.setAttribute("loginUser",loginService.getUser(dto));
 
         return  ResponseEntity.status(HttpStatus.OK).body(login);
     }

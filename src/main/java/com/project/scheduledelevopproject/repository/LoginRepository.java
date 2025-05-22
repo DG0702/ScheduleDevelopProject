@@ -9,10 +9,10 @@ import java.util.Optional;
 
 public interface LoginRepository extends JpaRepository<User, Long> {
 
-    Optional<User> findOptionalByUserEmailAndPassword(String userEmail, String password);
+    Optional<User> findOptionalByEmail(String email);
 
-    default User findByUserEmailAndPassword(String userEmail, String password){
-        return findOptionalByUserEmailAndPassword(userEmail,password).orElseThrow(
-                () -> new ResponseStatusException(HttpStatus.UNAUTHORIZED,"이메일 또는 비밀번호가 일치하지 않습니다."));
+    default User findByUserEmail(String email){
+        return findOptionalByEmail(email).orElseThrow(
+                () -> new ResponseStatusException(HttpStatus.UNAUTHORIZED,"존재하지 않은 이메일 입니다."));
     }
 }

@@ -1,5 +1,6 @@
 package com.project.scheduledelevopproject.service;
 
+import com.project.scheduledelevopproject.config.PasswordEncoder;
 import com.project.scheduledelevopproject.dto.signup.SignUpRequestDto;
 import com.project.scheduledelevopproject.dto.signup.SignUpResponseDto;
 import com.project.scheduledelevopproject.dto.user.UserRequestDto;
@@ -21,6 +22,8 @@ public class UserService {
 
     private final UserRepository userRepository;
 
+    private final PasswordEncoder passwordEncoder;
+
 
     public UserResponseDto save(UserRequestDto dto) {
         // dto -> entity
@@ -29,9 +32,9 @@ public class UserService {
         User savedUser = userRepository.save(user);
 
         return new UserResponseDto (
-                savedUser.getUserId(),
-                savedUser.getUserName(),
-                savedUser.getUserEmail(),
+                savedUser.getId(),
+                savedUser.getName(),
+                savedUser.getEmail(),
                 savedUser.getCreatedAt(),
                 savedUser.getUpdatedAt());
     }
@@ -51,9 +54,9 @@ public class UserService {
         User user = userRepository.findByIdOrElseThrow(userId);
 
         return new UserResponseDto(
-                user.getUserId(),
-                user.getUserName(),
-                user.getUserEmail(),
+                user.getId(),
+                user.getName(),
+                user.getEmail(),
                 user.getCreatedAt(),
                 user.getUpdatedAt());
     }
@@ -62,7 +65,9 @@ public class UserService {
     public UserResponseDto update(Long id, UserRequestDto dto) {
         User user = userRepository.findByIdOrElseThrow(id);
 
-        if(!(user.getPassword().equals(dto.getPassword()))){
+        boolean isMatch = passwordEncoder.matches(dto.getPassword(), user.getPassword());
+
+        if(!isMatch){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Wrong password");
         }
         
@@ -70,7 +75,7 @@ public class UserService {
         user.update(dto.getName(),dto.getEmail());
 
         return new UserResponseDto(
-                user.getUserId(),
+                user.getId(),
                 dto.getName(),
                 dto.getEmail(),
                 user.getCreatedAt(),
@@ -81,7 +86,9 @@ public class UserService {
     public void delete(Long userId, UserRequestDto dto) {
         User user = userRepository.findByIdOrElseThrow(userId);
 
-        if(!(user.getPassword().equals(dto.getPassword()))){
+        boolean isMatch = passwordEncoder.matches(dto.getPassword(), user.getPassword());
+
+        if(!isMatch){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Wrong password");
         }
 
@@ -92,13 +99,18 @@ public class UserService {
     // 회원가입
     public SignUpResponseDto signup(SignUpRequestDto dto){
         User user = dto.toEntity();
+        
+        // 비밀번호 암호화
+        String encodePassword =passwordEncoder.encode(user.getPassword());
+
+        user.setPassword(encodePassword);
 
         User signUp = userRepository.save(user);
 
         return new SignUpResponseDto(
-                signUp.getUserId(),
-                signUp.getUserName(),
-                signUp.getUserEmail(),
+                signUp.getId(),
+                signUp.getName(),
+                signUp.getEmail(),
                 signUp.getCreatedAt(),
                 signUp.getUpdatedAt()
         );

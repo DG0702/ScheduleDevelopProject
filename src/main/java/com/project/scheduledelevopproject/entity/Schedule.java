@@ -52,7 +52,7 @@ public class Schedule extends BaseEntity{
     public ScheduleResponseDto toDto(){
         return new ScheduleResponseDto(
                 scheduleId,
-                user.getUserId(),
+                user.getId(),
                 title, contents,
                 getCreatedAt(),
                 getUpdatedAt());
