@@ -26,6 +26,12 @@ public class UserService {
 
 
     public UserResponseDto save(UserRequestDto dto) {
+
+        // 비밀번호 암화화
+        String encodePassword = passwordEncoder.encode(dto.getPassword());
+
+        dto.setPassword(encodePassword);
+
         // dto -> entity
         User user = dto.toEntity();
 

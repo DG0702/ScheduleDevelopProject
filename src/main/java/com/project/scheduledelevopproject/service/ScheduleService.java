@@ -29,9 +29,15 @@ public class ScheduleService {
 
     public ScheduleResponseDto save(ScheduleRequestDto dto, User user){
 
+        // 로그인 id 값 가져오기
         Long loginId = user.getId();
 
         User userId = userRepository.findByIdOrElseThrow(loginId);
+
+        // 비밀번호 암호화
+        String encodePassword = passwordEncoder.encode(dto.getPassword());
+
+        dto.setPassword(encodePassword);
 
         Schedule schedule = dto.toEntity(userId);
 
