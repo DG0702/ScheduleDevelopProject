@@ -67,12 +67,12 @@ public class UserService {
         }
         
         // 업데이트
-        user.update(dto.getUserName(),dto.getUserEmail());
+        user.update(dto.getName(),dto.getEmail());
 
         return new UserResponseDto(
                 user.getUserId(),
-                dto.getUserName(),
-                dto.getUserEmail(),
+                dto.getName(),
+                dto.getEmail(),
                 user.getCreatedAt(),
                 user.getUpdatedAt()
         );

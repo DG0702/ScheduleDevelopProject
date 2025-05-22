@@ -13,12 +13,12 @@ import lombok.Getter;
 public class UserRequestDto {
     @NotBlank
     @Size(max = 4)
-    private String userName;
+    private String name;
 
     @NotBlank
     @Pattern(regexp = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+.[A-Za-z]{2,6}$", message = "이메일 형식에 맞지 않습니다.")
     @Size(max = 20)
-    private String userEmail;
+    private String email;
 
     @NotBlank
     @Size(max = 10)
@@ -26,6 +26,6 @@ public class UserRequestDto {
 
     // Dto -> Entity
     public User toEntity(){
-       return new User(userName,userEmail,password);
+       return new User(name,email,password);
     }
 }
