@@ -66,7 +66,7 @@ public class ScheduleService {
 
 
     public ScheduleResponseDto findById(Long id){
-        Schedule schedule = scheduleRepository.findScheduleByIdOrElseThrow(id);
+        Schedule schedule = scheduleRepository.findByScheduleIdOrElseThrow(id);
 
         return new ScheduleResponseDto(
                 schedule.getScheduleId(),
@@ -80,7 +80,7 @@ public class ScheduleService {
 
     @Transactional
     public ScheduleResponseDto update(Long id, ScheduleRequestDto dto){
-        Schedule schedule = scheduleRepository.findScheduleByIdOrElseThrow(id);
+        Schedule schedule = scheduleRepository.findByScheduleIdOrElseThrow(id);
 
         boolean isMatch = passwordEncoder.matches(dto.getPassword(), schedule.getPassword());
 
@@ -102,10 +102,10 @@ public class ScheduleService {
 
     }
 
-    public void delete(Long id, ScheduleRequestDto dto){
-        Schedule schedule = scheduleRepository.findScheduleByIdOrElseThrow(id);
+    public void delete(Long id, String password){
+        Schedule schedule = scheduleRepository.findByScheduleIdOrElseThrow(id);
 
-        boolean isMatch = passwordEncoder.matches(dto.getPassword(), schedule.getPassword());
+        boolean isMatch = passwordEncoder.matches(password, schedule.getPassword());
 
         if(!isMatch){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Wrong password");

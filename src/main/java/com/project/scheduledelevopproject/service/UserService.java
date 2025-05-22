@@ -89,10 +89,10 @@ public class UserService {
         );
     }
 
-    public void delete(Long userId, UserRequestDto dto) {
+    public void delete(Long userId, String password) {
         User user = userRepository.findByIdOrElseThrow(userId);
 
-        boolean isMatch = passwordEncoder.matches(dto.getPassword(), user.getPassword());
+        boolean isMatch = passwordEncoder.matches(password, user.getPassword());
 
         if(!isMatch){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Wrong password");
@@ -105,6 +105,10 @@ public class UserService {
     // 회원가입
     public SignUpResponseDto signup(SignUpRequestDto dto){
         User user = dto.toEntity();
+
+        if(userRepository.existsByEmail(dto.getUserEmail())){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"이미 존재하는 이메일입니다.");
+        }
         
         // 비밀번호 암호화
         String encodePassword =passwordEncoder.encode(user.getPassword());

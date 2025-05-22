@@ -17,7 +17,7 @@ public class Schedule extends BaseEntity{
     @Column (name = "schedule_id")
     private Long scheduleId;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
@@ -57,5 +57,7 @@ public class Schedule extends BaseEntity{
                 getCreatedAt(),
                 getUpdatedAt());
     }
+
+
 
 }

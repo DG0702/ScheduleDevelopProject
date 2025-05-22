@@ -11,4 +11,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
                 () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "UserId not found" + userId)
         );
     }
+
+    boolean existsByEmail(String email);
 }
