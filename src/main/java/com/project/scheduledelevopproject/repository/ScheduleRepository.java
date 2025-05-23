@@ -15,10 +15,13 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
                 () -> new ResponseStatusException(HttpStatus.NOT_FOUND,"Schedule not found" + scheduleId)) ;
     }
 
-    @Query("SELECT new com.project.scheduledelevopproject.dto.Page.PageResponseDto" +
+    @Query(value = "SELECT new com.project.scheduledelevopproject.dto.Page.PageResponseDto" +
             "(s.title,s.contents,COUNT (r.replyId) ,s.createdAt,s.updatedAt,u.name) " +
             "FROM Schedule s JOIN s.user u " +
             "LEFT JOIN Reply r " +
-            "ON r.schedule = s GROUP BY s.title,s.contents,s.createdAt,s.updatedAt,u.name")
+            "ON r.schedule = s GROUP BY s.title,s.contents,s.createdAt,s.updatedAt,u.name",
+
+            countQuery = "SELECT COUNT(S) FROM Schedule s"
+    )
     Page<PageResponseDto> getPageResponseDto(Pageable pageable);
 }
