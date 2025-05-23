@@ -19,9 +19,7 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
             "(s.title,s.contents,COUNT (r.replyId) ,s.createdAt,s.updatedAt,u.name) " +
             "FROM Schedule s JOIN s.user u " +
             "LEFT JOIN Reply r " +
-            "ON r.schedule = s GROUP BY s.title,s.contents,s.createdAt,s.updatedAt,u.name",
-
-            countQuery = "SELECT COUNT(S) FROM Schedule s"
+            "ON r.schedule = s GROUP BY s.title,s.contents,s.createdAt,s.updatedAt,u.name"
     )
     Page<PageResponseDto> getPageResponseDto(Pageable pageable);
 }
