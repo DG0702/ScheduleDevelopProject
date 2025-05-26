@@ -26,7 +26,7 @@ public class ScheduleService {
 
     private final PasswordEncoder passwordEncoder;
 
-
+    @Transactional
     public ScheduleResponseDto save(ScheduleRequestDto dto, User user){
 
         // 로그인 id 값 가져오기
@@ -102,6 +102,7 @@ public class ScheduleService {
 
     }
 
+    @Transactional
     public void delete(Long id, String password){
         Schedule schedule = scheduleRepository.findByScheduleIdOrElseThrow(id);
 

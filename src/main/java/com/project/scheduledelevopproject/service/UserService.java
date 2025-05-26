@@ -24,7 +24,7 @@ public class UserService {
 
     private final PasswordEncoder passwordEncoder;
 
-
+    @Transactional
     public UserResponseDto save(UserRequestDto dto) {
 
         // 비밀번호 암화화
@@ -89,6 +89,7 @@ public class UserService {
         );
     }
 
+    @Transactional
     public void delete(Long userId, String password) {
         User user = userRepository.findByIdOrElseThrow(userId);
 
@@ -103,6 +104,7 @@ public class UserService {
 
 
     // 회원가입
+    @Transactional
     public SignUpResponseDto signup(SignUpRequestDto dto){
         User user = dto.toEntity();
 

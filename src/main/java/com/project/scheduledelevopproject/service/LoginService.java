@@ -18,6 +18,7 @@ public class LoginService {
 
     private final PasswordEncoder passwordEncoder;
 
+
     public LoginResponseDto login(LoginRequestDto dto){
         
         // 아이디 검증 (DB -> Repository 로직에서 구현)

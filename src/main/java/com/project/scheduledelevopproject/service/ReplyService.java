@@ -22,6 +22,7 @@ public class ReplyService {
 
     private final ScheduleRepository scheduleRepository;
 
+    @Transactional
     public ReplyResponseDto save(User user, ReplyRequestDto dto, Long id){
 
         // 로그인 ID 값 가져오기
@@ -77,6 +78,7 @@ public class ReplyService {
         );
     }
 
+    @Transactional
     public void delete(Long id){
         Reply reply = replyRepository.findByReplyIdOrElseThrow(id);
 
