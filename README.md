@@ -19,6 +19,33 @@
 <br>
 <hr>
 
+## 📜 시스템 설계 문서
+
+- **[회원가입 API](https://documenter.getpostman.com/view/44617139/2sB2qajMxB)**
+
+
+- **[로그인 API](https://documenter.getpostman.com/view/44617139/2sB2qajMxE)**
+
+
+- **[유저 API](https://documenter.getpostman.com/view/44617139/2sB2qXk3Jy)**
+
+
+- **[일정 API](https://documenter.getpostman.com/view/44617139/2sB2qXk3Jx)**
+
+
+- **[댓글 API](https://documenter.getpostman.com/view/44617139/2sB2qcD1JG)**
+
+
+- **[페이지 API](https://documenter.getpostman.com/view/44617139/2sB2qcD1NX)**
+
+
+- **ERD**
+
+![img.png](img.png)
+
+
+<hr>
+
 ## ✅ 요구사항
 
 <hr>
@@ -251,9 +278,9 @@ project/
 
 <hr>
 
-## 트러블 슈팅
+## 💫 트러블 슈팅
 
-
+- **[Velog](https://velog.io/@dkzh506/Springboot-%EC%9D%BC%EC%A0%95-%EA%B4%80%EB%A6%AC-%EC%95%B1-Develop)에서 확인**
 
 
 
