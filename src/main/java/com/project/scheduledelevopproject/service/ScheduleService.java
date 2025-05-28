@@ -61,14 +61,7 @@ public class ScheduleService {
     public ScheduleResponseDto findById(Long id){
         Schedule schedule = scheduleRepository.findByScheduleIdOrElseThrow(id);
 
-        return new ScheduleResponseDto(
-                schedule.getScheduleId(),
-                schedule.getUser().getId(),
-                schedule.getTitle(),
-                schedule.getContents(),
-                schedule.getCreatedAt(),
-                schedule.getUpdatedAt()
-        );
+        return schedule.toDto();
     }
 
     @Transactional
