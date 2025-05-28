@@ -22,6 +22,7 @@ public class LoginController {
 
     @PostMapping("/login")
     public ResponseEntity<LoginResponseDto> login(@RequestBody @Valid LoginRequestDto dto, HttpServletRequest request) {
+
         LoginResponseDto login = loginService.login(dto);
 
         HttpSession session = request.getSession();

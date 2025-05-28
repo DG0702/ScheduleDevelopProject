@@ -82,8 +82,8 @@ public class UserService {
 
         return new UserResponseDto(
                 user.getId(),
-                dto.getName(),
-                dto.getEmail(),
+                user.getName(),
+                user.getEmail(),
                 user.getCreatedAt(),
                 user.getUpdatedAt()
         );
