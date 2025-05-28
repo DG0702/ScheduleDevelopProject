@@ -37,12 +37,7 @@ public class UserService {
 
         User savedUser = userRepository.save(user);
 
-        return new UserResponseDto (
-                savedUser.getId(),
-                savedUser.getName(),
-                savedUser.getEmail(),
-                savedUser.getCreatedAt(),
-                savedUser.getUpdatedAt());
+        return savedUser.toDto();
     }
 
     public List<UserResponseDto> findAll(){
@@ -59,12 +54,7 @@ public class UserService {
     public UserResponseDto findById(Long userId) {
         User user = userRepository.findByIdOrElseThrow(userId);
 
-        return new UserResponseDto(
-                user.getId(),
-                user.getName(),
-                user.getEmail(),
-                user.getCreatedAt(),
-                user.getUpdatedAt());
+        return user.toDto();
     }
 
     @Transactional
@@ -80,13 +70,7 @@ public class UserService {
         // 업데이트
         user.update(dto.getName(),dto.getEmail());
 
-        return new UserResponseDto(
-                user.getId(),
-                user.getName(),
-                user.getEmail(),
-                user.getCreatedAt(),
-                user.getUpdatedAt()
-        );
+        return user.toDto();
     }
 
     @Transactional

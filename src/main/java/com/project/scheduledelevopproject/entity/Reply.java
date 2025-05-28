@@ -1,5 +1,6 @@
 package com.project.scheduledelevopproject.entity;
 
+import com.project.scheduledelevopproject.dto.reply.ReplyResponseDto;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -36,6 +37,18 @@ public class Reply extends BaseEntity{
        if(contents != null){
            this.contents = contents;
        }
+    }
+
+    // entity -> dto
+    public ReplyResponseDto toDto(){
+        return new ReplyResponseDto(
+                replyId,
+                schedule.getScheduleId(),
+                user.getId(),
+                contents,
+                getCreatedAt(),
+                getUpdatedAt()
+        );
     }
 
 }

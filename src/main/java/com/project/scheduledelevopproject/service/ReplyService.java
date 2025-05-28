@@ -37,28 +37,14 @@ public class ReplyService {
 
         Reply savedReply = replyRepository.save(reply);
 
-        return new ReplyResponseDto(
-                savedReply.getReplyId(),
-                savedReply.getSchedule().getScheduleId(),
-                savedReply.getUser().getId(),
-                savedReply.getContents(),
-                savedReply.getCreatedAt(),
-                savedReply.getUpdatedAt()
-        );
+        return savedReply.toDto();
     }
 
 
     public ReplyResponseDto findById(Long id){
         Reply reply = replyRepository.findByReplyIdOrElseThrow(id);
 
-        return new ReplyResponseDto(
-                reply.getReplyId(),
-                reply.getSchedule().getScheduleId(),
-                reply.getUser().getId(),
-                reply.getContents(),
-                reply.getCreatedAt(),
-                reply.getUpdatedAt()
-        );
+        return reply.toDto();
     }
 
     @Transactional
@@ -68,14 +54,7 @@ public class ReplyService {
         // update
         reply.update(dto.getContents());
 
-        return new ReplyResponseDto(
-                reply.getReplyId(),
-                reply.getSchedule().getScheduleId(),
-                reply.getUser().getId(),
-                reply.getContents(),
-                reply.getCreatedAt(),
-                reply.getUpdatedAt()
-        );
+        return reply.toDto();
     }
 
     @Transactional

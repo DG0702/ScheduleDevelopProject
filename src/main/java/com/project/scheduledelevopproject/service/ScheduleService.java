@@ -43,14 +43,7 @@ public class ScheduleService {
 
         Schedule savedSchedule = scheduleRepository.save(schedule);
 
-        return new ScheduleResponseDto(
-                savedSchedule.getScheduleId(),
-                savedSchedule.getUser().getId(),
-                savedSchedule.getTitle(),
-                savedSchedule.getContents(),
-                savedSchedule.getCreatedAt(),
-                savedSchedule.getUpdatedAt()
-        );
+        return savedSchedule.toDto();
     }
 
 
@@ -91,14 +84,7 @@ public class ScheduleService {
         // update
         schedule.update(dto.getTitle(), dto.getContents());
 
-        return new ScheduleResponseDto(
-                schedule.getScheduleId(),
-                schedule.getUser().getId(),
-                schedule.getTitle(),
-                schedule.getContents(),
-                schedule.getCreatedAt(),
-                schedule.getUpdatedAt()
-        );
+        return schedule.toDto();
 
     }
 
