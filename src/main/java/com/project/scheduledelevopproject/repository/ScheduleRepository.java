@@ -6,14 +6,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.server.ResponseStatusException;
+
 
 public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
-    default Schedule findByScheduleIdOrElseThrow(Long scheduleId){
-        return findById(scheduleId).orElseThrow(
-                () -> new ResponseStatusException(HttpStatus.NOT_FOUND,"Schedule not found" + scheduleId)) ;
-    }
 
     @Query(value = "SELECT new com.project.scheduledelevopproject.dto.Page.PageResponseDto" +
             "(s.title,s.contents,COUNT (r.replyId) ,s.createdAt,s.updatedAt,u.name) " +

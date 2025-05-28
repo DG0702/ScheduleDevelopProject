@@ -32,7 +32,8 @@ public class ScheduleService {
         // 로그인 id 값 가져오기
         Long loginId = user.getId();
 
-        User userId = userRepository.findByIdOrElseThrow(loginId);
+        User userId = userRepository.findById(loginId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "UserId not found" + loginId));
 
         // 비밀번호 암호화
         String encodePassword = passwordEncoder.encode(dto.getPassword());
@@ -59,14 +60,16 @@ public class ScheduleService {
 
 
     public ScheduleResponseDto findById(Long id){
-        Schedule schedule = scheduleRepository.findByScheduleIdOrElseThrow(id);
+        Schedule schedule = scheduleRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,"Schedule not found" + id));
 
         return schedule.toDto();
     }
 
     @Transactional
     public ScheduleResponseDto update(Long id, ScheduleRequestDto dto){
-        Schedule schedule = scheduleRepository.findByScheduleIdOrElseThrow(id);
+        Schedule schedule = scheduleRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,"Schedule not found" + id));
 
         boolean isMatch = passwordEncoder.matches(dto.getPassword(), schedule.getPassword());
 
@@ -83,7 +86,8 @@ public class ScheduleService {
 
     @Transactional
     public void delete(Long id, String password){
-        Schedule schedule = scheduleRepository.findByScheduleIdOrElseThrow(id);
+        Schedule schedule = scheduleRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,"Schedule not found" + id));
 
         boolean isMatch = passwordEncoder.matches(password, schedule.getPassword());
 

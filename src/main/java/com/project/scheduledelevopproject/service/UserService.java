@@ -52,14 +52,16 @@ public class UserService {
 
 
     public UserResponseDto findById(Long userId) {
-        User user = userRepository.findByIdOrElseThrow(userId);
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "UserId not found" + userId));
 
         return user.toDto();
     }
 
     @Transactional
     public UserResponseDto update(Long id, UserRequestDto dto) {
-        User user = userRepository.findByIdOrElseThrow(id);
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "UserId not found" + id));
 
         boolean isMatch = passwordEncoder.matches(dto.getPassword(), user.getPassword());
 
@@ -75,7 +77,8 @@ public class UserService {
 
     @Transactional
     public void delete(Long userId, String password) {
-        User user = userRepository.findByIdOrElseThrow(userId);
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "UserId not found" + userId));
 
         boolean isMatch = passwordEncoder.matches(password, user.getPassword());
 

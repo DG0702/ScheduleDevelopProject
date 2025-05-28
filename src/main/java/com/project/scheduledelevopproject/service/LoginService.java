@@ -22,7 +22,8 @@ public class LoginService {
     public LoginResponseDto login(LoginRequestDto dto){
         
         // 아이디 검증 (DB -> Repository 로직에서 구현)
-        User user = loginRepository.findByUserEmail(dto.getUserEmail());
+        User user = loginRepository.findByEmail(dto.getUserEmail())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED,"존재하지 않은 이메일 입니다."));
         
         // 비밀번호 검증 (비교 -> Service 로직에서 구현)
         boolean isMatch =  passwordEncoder.matches(dto.getPassword(), user.getPassword());
@@ -35,6 +36,7 @@ public class LoginService {
     }
 
     public User getUser(LoginRequestDto dto){
-        return loginRepository.findByUserEmail(dto.getUserEmail());
+        return loginRepository.findByEmail(dto.getUserEmail())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED,"존재하지 않은 이메일 입니다."));
     }
 }
