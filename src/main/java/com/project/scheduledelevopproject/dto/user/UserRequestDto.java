@@ -1,6 +1,6 @@
 package com.project.scheduledelevopproject.dto.user;
 
-import com.project.scheduledelevopproject.entity.User;
+import com.project.scheduledelevopproject.common.EmailRegex;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
@@ -17,7 +17,7 @@ public class UserRequestDto {
     private String name;
 
     @NotBlank
-    @Pattern(regexp = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+.[A-Za-z]{2,6}$", message = "이메일 형식에 맞지 않습니다.")
+    @Pattern(regexp = EmailRegex.emailPattern , message = "이메일 형식에 맞지 않습니다.")
     @Size(max = 20)
     private String email;
 
@@ -25,8 +25,4 @@ public class UserRequestDto {
     @Size(max = 10)
     private String password;
 
-    // Dto -> Entity
-    public User toEntity(){
-       return new User(name,email,password);
-    }
 }

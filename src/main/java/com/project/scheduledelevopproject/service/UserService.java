@@ -1,6 +1,9 @@
 package com.project.scheduledelevopproject.service;
 
+import com.project.scheduledelevopproject.common.UserMapper;
 import com.project.scheduledelevopproject.config.PasswordEncoder;
+import com.project.scheduledelevopproject.dto.login.LoginRequestDto;
+import com.project.scheduledelevopproject.dto.login.LoginResponseDto;
 import com.project.scheduledelevopproject.dto.signup.SignUpRequestDto;
 import com.project.scheduledelevopproject.dto.signup.SignUpResponseDto;
 import com.project.scheduledelevopproject.dto.user.UserRequestDto;
@@ -24,6 +27,9 @@ public class UserService {
 
     private final PasswordEncoder passwordEncoder;
 
+
+
+
     @Transactional
     public UserResponseDto save(UserRequestDto dto) {
 
@@ -33,11 +39,11 @@ public class UserService {
         dto.setPassword(encodePassword);
 
         // dto -> entity
-        User user = dto.toEntity();
+        User user = UserMapper.toEntity(dto);
 
         User savedUser = userRepository.save(user);
 
-        return savedUser.toDto();
+        return UserMapper.toDto(savedUser);
     }
 
     public List<UserResponseDto> findAll(){
@@ -45,7 +51,7 @@ public class UserService {
 
         List<User> result = userRepository.findAll();
         for(User u : result){
-            users.add(u.toDto());
+            users.add(UserMapper.toDto(u));
         }
         return users;
     }
@@ -55,7 +61,7 @@ public class UserService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "UserId not found" + userId));
 
-        return user.toDto();
+        return UserMapper.toDto(user);
     }
 
     @Transactional
@@ -72,7 +78,7 @@ public class UserService {
         // 업데이트
         user.update(dto.getName(),dto.getEmail());
 
-        return user.toDto();
+        return UserMapper.toDto(user);
     }
 
     @Transactional
@@ -115,6 +121,26 @@ public class UserService {
         );
     }
 
+    public LoginResponseDto login(LoginRequestDto dto){
+
+        // 아이디 검증 (DB -> Repository 로직에서 구현)
+        User user = userRepository.findByEmail(dto.getUserEmail())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED,"존재하지 않은 이메일 입니다."));
+
+        // 비밀번호 검증 (비교 -> Service 로직에서 구현)
+        boolean isMatch =  passwordEncoder.matches(dto.getPassword(), user.getPassword());
+
+        if(!isMatch){
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,"비밀번호가 일치하지 않습니다.");
+        }
+
+        return new LoginResponseDto(user.getId());
+    }
+
+    public User getUser(LoginRequestDto dto){
+        return userRepository.findByEmail(dto.getUserEmail())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED,"존재하지 않은 이메일 입니다."));
+    }
 
 
 }

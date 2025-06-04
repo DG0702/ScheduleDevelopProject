@@ -17,21 +17,26 @@ public class ReplyController {
     private final ReplyService replyService;
 
 
-    @PostMapping("/schedule/{id}/reply")
-    public ResponseEntity<ReplyResponseDto> createReply(@RequestBody ReplyRequestDto dto, HttpSession session, @PathVariable Long id){
+    @PostMapping("/reply")
+    public ResponseEntity<ReplyResponseDto> createReply(@RequestBody ReplyRequestDto dto, HttpSession session){
         User user =(User) session.getAttribute("loginUser");
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(replyService.save(user,dto,id));
+        ReplyResponseDto savedReply = replyService.save(user, dto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedReply);
     }
 
     @GetMapping("/reply/{id}")
     public ResponseEntity<ReplyResponseDto> selectReply(@PathVariable Long id){
-        return ResponseEntity.status(HttpStatus.OK).body(replyService.findById(id));
+
+        ReplyResponseDto replies = replyService.findById(id);
+        return ResponseEntity.status(HttpStatus.OK).body(replies);
     }
 
     @PatchMapping("/reply/{id}")
     public ResponseEntity<ReplyResponseDto> updateReply(@PathVariable Long id, @RequestBody ReplyRequestDto dto){
-        return ResponseEntity.status(HttpStatus.OK).body(replyService.update(id, dto));
+
+        ReplyResponseDto updatedReply = replyService.update(id, dto);
+        return ResponseEntity.status(HttpStatus.OK).body(updatedReply);
     }
 
     @DeleteMapping("/reply/{id}")

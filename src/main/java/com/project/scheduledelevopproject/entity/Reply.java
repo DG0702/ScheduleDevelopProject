@@ -1,9 +1,10 @@
 package com.project.scheduledelevopproject.entity;
 
-import com.project.scheduledelevopproject.dto.reply.ReplyResponseDto;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.Optional;
 
 @Getter
 @NoArgsConstructor
@@ -34,21 +35,9 @@ public class Reply extends BaseEntity{
 
     //update
     public void update (String contents){
-       if(contents != null){
-           this.contents = contents;
-       }
+        Optional.ofNullable(contents).ifPresent(c -> this.contents = c.isBlank() ? this.contents : c);
     }
 
-    // entity -> dto
-    public ReplyResponseDto toDto(){
-        return new ReplyResponseDto(
-                replyId,
-                schedule.getScheduleId(),
-                user.getId(),
-                contents,
-                getCreatedAt(),
-                getUpdatedAt()
-        );
-    }
+
 
 }

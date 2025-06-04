@@ -1,5 +1,6 @@
 package com.project.scheduledelevopproject.service;
 
+import com.project.scheduledelevopproject.common.ReplyMapper;
 import com.project.scheduledelevopproject.dto.reply.ReplyRequestDto;
 import com.project.scheduledelevopproject.dto.reply.ReplyResponseDto;
 import com.project.scheduledelevopproject.entity.Reply;
@@ -25,7 +26,7 @@ public class ReplyService {
     private final ScheduleRepository scheduleRepository;
 
     @Transactional
-    public ReplyResponseDto save(User user, ReplyRequestDto dto, Long id){
+    public ReplyResponseDto save(User user, ReplyRequestDto dto){
 
         // 로그인 ID 값 가져오기
         Long LoginId = user.getId();
@@ -34,14 +35,14 @@ public class ReplyService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "UserId not found" + LoginId));
 
         // 일정 ID 값 가져오기
-        Schedule scheduleId = scheduleRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,"Schedule not found" + id));
+        Schedule scheduleId = scheduleRepository.findById(dto.getScheduleId())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,"Schedule not found" + dto.getScheduleId()));
 
-        Reply reply = dto.toEntity(scheduleId, userId);
+        Reply reply = ReplyMapper.toEntity(scheduleId, userId,dto);
 
         Reply savedReply = replyRepository.save(reply);
 
-        return savedReply.toDto();
+        return ReplyMapper.toDto(savedReply);
     }
 
 
@@ -49,7 +50,7 @@ public class ReplyService {
         Reply reply = replyRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,"Reply not Found" + id));
 
-        return reply.toDto();
+        return ReplyMapper.toDto(reply);
     }
 
     @Transactional
@@ -60,7 +61,7 @@ public class ReplyService {
         // update
         reply.update(dto.getContents());
 
-        return reply.toDto();
+        return ReplyMapper.toDto(reply);
     }
 
     @Transactional

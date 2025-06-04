@@ -4,7 +4,6 @@ import com.project.scheduledelevopproject.dto.Page.PageResponseDto;
 import com.project.scheduledelevopproject.dto.schedule.ScheduleRequestDto;
 import com.project.scheduledelevopproject.dto.schedule.ScheduleResponseDto;
 import com.project.scheduledelevopproject.entity.User;
-import com.project.scheduledelevopproject.service.PageService;
 import com.project.scheduledelevopproject.service.ScheduleService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -23,30 +22,36 @@ public class ScheduleController {
 
     private final ScheduleService scheduleService;
 
-    private final PageService pageService;
 
     @PostMapping
     public ResponseEntity<ScheduleResponseDto> save(@RequestBody @Valid ScheduleRequestDto dto, HttpSession session){
 
         User user = (User) session.getAttribute("loginUser");
 
-        return ResponseEntity.status(HttpStatus.OK).body(scheduleService.save(dto,user));
+        ScheduleResponseDto savedSchedule = scheduleService.save(dto,user);
+
+        return ResponseEntity.status(HttpStatus.OK).body(savedSchedule);
     }
 
     @GetMapping
     public ResponseEntity<List<ScheduleResponseDto>> findAll(){
-        return ResponseEntity.status(HttpStatus.OK).body(scheduleService.findAll());
+
+        List<ScheduleResponseDto> schedules = scheduleService.findAll();
+        return ResponseEntity.status(HttpStatus.OK).body(schedules);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<ScheduleResponseDto> findById(@PathVariable Long id){
-        return ResponseEntity.status(HttpStatus.OK).body(scheduleService.findById(id));
+
+        ScheduleResponseDto schedule = scheduleService.findById(id);
+        return ResponseEntity.status(HttpStatus.OK).body(schedule);
     }
 
     @PatchMapping("/{id}")
     public ResponseEntity<ScheduleResponseDto> update(@PathVariable Long id,
                                                       @RequestBody @Valid ScheduleRequestDto dto){
-        return ResponseEntity.status(HttpStatus.OK).body(scheduleService.update(id,dto));
+        ScheduleResponseDto updatedSchedule = scheduleService.update(id, dto);
+        return ResponseEntity.status(HttpStatus.OK).body(updatedSchedule);
     }
 
     @DeleteMapping({"/{id}"})
@@ -62,6 +67,7 @@ public class ScheduleController {
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "10") int size
     ){
-        return ResponseEntity.status(HttpStatus.OK).body(pageService.getPage(page,size));
+        Page<PageResponseDto> pageList = scheduleService.getPage(page, size);
+        return ResponseEntity.status(HttpStatus.OK).body(pageList);
     }
 }

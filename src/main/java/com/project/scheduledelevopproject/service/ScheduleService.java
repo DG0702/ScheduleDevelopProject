@@ -1,6 +1,8 @@
 package com.project.scheduledelevopproject.service;
 
+import com.project.scheduledelevopproject.common.ScheduleMapper;
 import com.project.scheduledelevopproject.config.PasswordEncoder;
+import com.project.scheduledelevopproject.dto.Page.PageResponseDto;
 import com.project.scheduledelevopproject.dto.schedule.ScheduleRequestDto;
 import com.project.scheduledelevopproject.dto.schedule.ScheduleResponseDto;
 import com.project.scheduledelevopproject.entity.Schedule;
@@ -8,6 +10,10 @@ import com.project.scheduledelevopproject.entity.User;
 import com.project.scheduledelevopproject.repository.ScheduleRepository;
 import com.project.scheduledelevopproject.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -40,12 +46,13 @@ public class ScheduleService {
 
         dto.setPassword(encodePassword);
 
-        Schedule schedule = dto.toEntity(userId);
+        Schedule schedule = ScheduleMapper.toEntity(dto,userId);
 
         Schedule savedSchedule = scheduleRepository.save(schedule);
 
-        return savedSchedule.toDto();
+        return ScheduleMapper.toDto(savedSchedule);
     }
+
 
 
     public List<ScheduleResponseDto> findAll(){
@@ -53,7 +60,7 @@ public class ScheduleService {
 
         List<Schedule> result = scheduleRepository.findAll();
         for(Schedule schedule : result){
-            schedules.add(schedule.toDto());
+            schedules.add(ScheduleMapper.toDto(schedule));
         }
         return schedules;
     }
@@ -63,7 +70,7 @@ public class ScheduleService {
         Schedule schedule = scheduleRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,"Schedule not found" + id));
 
-        return schedule.toDto();
+        return ScheduleMapper.toDto(schedule);
     }
 
     @Transactional
@@ -80,7 +87,7 @@ public class ScheduleService {
         // update
         schedule.update(dto.getTitle(), dto.getContents());
 
-        return schedule.toDto();
+        return ScheduleMapper.toDto(schedule);
 
     }
 
@@ -96,6 +103,13 @@ public class ScheduleService {
         }
 
         scheduleRepository.delete(schedule);
+    }
+
+    // page
+    public Page<PageResponseDto> getPage(int page, int size){
+        Pageable pageable = PageRequest.of(page -1  ,size, Sort.by("updatedAt").descending());
+
+        return scheduleRepository.getPageResponseDto(pageable);
     }
 
 }
